@@ -146,8 +146,65 @@ operation:
         required: false
   python_action:
     use_jython: false
-    script: "# do not remove the execute function\ndef execute(action, echo_request, show_asset_id, details, os_pattern, truncation_limit, ips, ipv6, ag_ids, ag_titles, ids, id_min, id_max, network_ids, compliance_enabled, no_vm_scan_since, no_compliance_scan_since, vm_scan_since, compliance_scan_since, vm_processed_before, vm_processed_after, vm_scan_date_before, vm_scan_date_after, vm_auth_scan_date_before, vm_auth_scan_date_after, scap_scan_since, no_scap_scan_since, use_tags, tag_set_by, tag_include_selector, tag_exclude_selector, tag_set_include, tag_set_exclude, show_tags, show_ars, ars_min, ars_max, show_ars_factors, show_trurisk, trurisk_min, trurisk_max, show_trurisk_factors, host_metadata, host_metadata_fields, show_cloud_tags, cloud_tag_fields):\n    import json\n    inputs = {}\n    if action: inputs['action'] = action\n    if echo_request: inputs[\"echo_request\"] = echo_request\n    if show_asset_id: inputs[\"show_asset_id\"] = show_asset_id\n    if details: inputs[\"details\"] = details\n    if os_pattern: inputs[\"os_pattern\"] = os_pattern\n    if truncation_limit: inputs[\"truncation_limit\"] = truncation_limit\n    if ips: inputs[\"ips\"] = ips\n    if ipv6: inputs[\"ipv6\"] = ipv6\n    if ag_ids: inputs[\"ag_ids\"] = ag_ids\n    if ag_titles: inputs[\"ag_titles\"] = ag_titles\n    if ids: inputs[\"ids\"] = ids\n    if id_min: inputs[\"id_min\"] = id_min\n    if id_max: inputs[\"id_max\"] = id_max\n    if network_ids: inputs[\"network_ids\"] = network_ids\n    if compliance_enabled: inputs[\"compliance_enabled\"] = compliance_enabled\n    if no_vm_scan_since: inputs[\"no_vm_scan_since\"] = no_vm_scan_since\n    if no_compliance_scan_since: inputs[\"no_compliance_scan_since\"] = no_compliance_scan_since\n    if vm_scan_since: inputs[\"vm_scan_since\"] = vm_scan_since\n    if compliance_scan_since: inputs[\"compliance_scan_since\"] = compliance_scan_since\n    if vm_processed_before: inputs[\"vm_processed_before\"] = vm_processed_before\n    if vm_processed_after: inputs[\"vm_processed_after\"] = vm_processed_after\n    if vm_scan_date_before: inputs[\"vm_scan_date_before\"] = vm_scan_date_before\n    if vm_scan_date_after: inputs[\"vm_scan_date_after\"] = vm_scan_date_after\n    if vm_auth_scan_date_before: inputs[\"vm_auth_scan_date_before\"] = vm_auth_scan_date_before\n    if vm_auth_scan_date_after: inputs[\"vm_auth_scan_date_after\"] = vm_auth_scan_date_after\n    if scap_scan_since: inputs[\"scap_scan_since\"] = scap_scan_since\n    if no_scap_scan_since: inputs[\"no_scap_scan_since\"] = no_scap_scan_since\n    if use_tags: inputs[\"use_tags\"] = use_tags\n    if tag_set_by: inputs[\"tag_set_by\"] = tag_set_by\n    if tag_include_selector: inputs[\"tag_include_selector\"] = tag_include_selector\n    if tag_exclude_selector: inputs[\"tag_exclude_selector\"] = tag_exclude_selector\n    if tag_set_include: inputs[\"tag_set_include\"] = tag_set_include\n    if tag_set_exclude: inputs[\"tag_set_exclude\"] = tag_set_exclude\n    if show_tags: inputs[\"show_tags\"] = show_tags\n    if show_ars: inputs[\"show_ars\"] = show_ars\n    if ars_min: inputs[\"ars_min\"] = ars_min\n    if ars_max: inputs[\"ars_max\"] = ars_max\n    if show_ars_factors: inputs[\"show_ars_factors\"] = show_ars_factors\n    if show_trurisk: inputs[\"show_trurisk\"] = show_trurisk\n    if trurisk_min: inputs[\"trurisk_min\"] = trurisk_min\n    if trurisk_max: inputs[\"trurisk_max\"] = trurisk_max\n    if show_trurisk_factors: inputs[\"show_trurisk_factors\"] = show_trurisk_factors\n    if host_metadata: inputs[\"host_metadata\"] = host_metadata\n    if host_metadata_fields: inputs[\"host_metadata_fields\"] = host_metadata_fields\n    if show_cloud_tags: inputs[\"show_cloud_tags\"] = show_cloud_tags\n    if cloud_tag_fields: inputs[\"cloud_tag_fields\"] = cloud_tag_fields\n\n    json_output = json.dumps(inputs)\n\n    # Return the JSON string\n    \n    return {\"inputs_json\": json_output}\n\n\n# you can add additional helper methods below."
+    script: |-
+      # do not remove the execute function
+      def execute(action, echo_request, show_asset_id, details, os_pattern, truncation_limit, ips, ipv6, ag_ids, ag_titles, ids, id_min, id_max, network_ids, compliance_enabled, no_vm_scan_since, no_compliance_scan_since, vm_scan_since, compliance_scan_since, vm_processed_before, vm_processed_after, vm_scan_date_before, vm_scan_date_after, vm_auth_scan_date_before, vm_auth_scan_date_after, scap_scan_since, no_scap_scan_since, use_tags, tag_set_by, tag_include_selector, tag_exclude_selector, tag_set_include, tag_set_exclude, show_tags, show_ars, ars_min, ars_max, show_ars_factors, show_trurisk, trurisk_min, trurisk_max, show_trurisk_factors, host_metadata, host_metadata_fields, show_cloud_tags, cloud_tag_fields):
+          parameters = []
+          if action: parameters.append("action=" + str(action))
+          if echo_request: parameters.append("echo_request=" + str(echo_request))
+          if show_asset_id: parameters.append("show_asset_id=" + str(show_asset_id))
+          if details: parameters.append("details=" + str(details))
+          if os_pattern: parameters.append("os_pattern=" + str(os_pattern))
+          if truncation_limit: parameters.append("truncation_limit=" + str(truncation_limit))
+          if ips: parameters.append("ips=" + str(ips))
+          if ipv6: parameters.append("ipv6=" + str(ipv6))
+          if ag_ids: parameters.append("ag_ids=" + str(ag_ids))
+          if ag_titles: parameters.append("ag_titles=" + str(ag_titles))
+          if ids: parameters.append("ids=" + str(ids))
+          if id_min: parameters.append("id_min=" + str(id_min))
+          if id_max: parameters.append("id_max=" + str(id_max))
+          if network_ids: parameters.append("network_ids=" + str(network_ids))
+          if compliance_enabled: parameters.append("compliance_enabled=" + str(compliance_enabled))
+          if no_vm_scan_since: parameters.append("no_vm_scan_since=" + str(no_vm_scan_since))
+          if no_compliance_scan_since: parameters.append("no_compliance_scan_since=" + str(no_compliance_scan_since))
+          if vm_scan_since: parameters.append("vm_scan_since=" + str(vm_scan_since))
+          if compliance_scan_since: parameters.append("compliance_scan_since=" + str(compliance_scan_since))
+          if vm_processed_before: parameters.append("vm_processed_before=" + str(vm_processed_before))
+          if vm_processed_after: parameters.append("vm_processed_after=" + str(vm_processed_after))
+          if vm_scan_date_before: parameters.append("vm_scan_date_before=" + str(vm_scan_date_before))
+          if vm_scan_date_after: parameters.append("vm_scan_date_after=" + str(vm_scan_date_after))
+          if vm_auth_scan_date_before: parameters.append("vm_auth_scan_date_before=" + str(vm_auth_scan_date_before))
+          if vm_auth_scan_date_after: parameters.append("vm_auth_scan_date_after=" + str(vm_auth_scan_date_after))
+          if scap_scan_since: parameters.append("scap_scan_since=" + str(scap_scan_since))
+          if no_scap_scan_since: parameters.append("no_scap_scan_since=" + str(no_scap_scan_since))
+          if use_tags: parameters.append("use_tags=" + str(use_tags))
+          if tag_set_by: parameters.append("tag_set_by=" + str(tag_set_by))
+          if tag_include_selector: parameters.append("tag_include_selector=" + str(tag_include_selector))
+          if tag_exclude_selector: parameters.append("tag_exclude_selector=" + str(tag_exclude_selector))
+          if tag_set_include: parameters.append("tag_set_include=" + str(tag_set_include))
+          if tag_set_exclude: parameters.append("tag_set_exclude=" + str(tag_set_exclude))
+          if show_tags: parameters.append("show_tags=" + str(show_tags))
+          if show_ars: parameters.append("show_ars=" + str(show_ars))
+          if ars_min: parameters.append("ars_min=" + str(ars_min))
+          if ars_max: parameters.append("ars_max=" + str(ars_max))
+          if show_ars_factors: parameters.append("show_ars_factors=" + str(show_ars_factors))
+          if show_trurisk: parameters.append("show_trurisk=" + str(show_trurisk))
+          if trurisk_min: parameters.append("trurisk_min=" + str(trurisk_min))
+          if trurisk_max: parameters.append("trurisk_max=" + str(trurisk_max))
+          if show_trurisk_factors: parameters.append("show_trurisk_factors=" + str(show_trurisk_factors))
+          if host_metadata: parameters.append("host_metadata=" + str(host_metadata))
+          if host_metadata_fields: parameters.append("host_metadata_fields=" + str(host_metadata_fields))
+          if show_cloud_tags: parameters.append("show_cloud_tags=" + str(show_cloud_tags))
+          if cloud_tag_fields: parameters.append("cloud_tag_fields=" + str(cloud_tag_fields))
+
+          parameter_string = '&'.join(parameters)
+
+          return {"query_params": parameter_string}
+    
+
+
+# you can add additional helper methods below."
   outputs:
-    - inputs_json
+    - query_params
   results:
     - SUCCESS
