@@ -24,7 +24,7 @@ flow:
         do:
           io.cloudslang.qualys.utils.qualys_xml_to_ace_json:
             - xml_input: '${return_result}'
-            - base_url: "${get_sp('base_url')}"
+            - base_url: "${get_sp('io.cloudslang.qualys.base_url')}"
         publish:
           - ace_json
           - warning_code
@@ -51,9 +51,9 @@ flow:
           io.cloudslang.base.http.http_client_post:
             - url: '${warning_url}'
             - auth_type: Basic
-            - username: "${get_sp('username')}"
+            - username: "${get_sp('io.cloudslang.qualys.username')}"
             - password:
-                value: "${get_sp('password')}"
+                value: "${get_sp('io.cloudslang.qualys.password')}"
                 sensitive: true
             - headers: 'X-Requested-With: ACE'
         publish:

@@ -9,7 +9,7 @@
 ########################################################################################################################
 namespace: io.cloudslang.qualys.vm
 flow:
-  name: get_host_detection_list
+  name: get_knowledge_base
   inputs:
     - qualys_base_url: "${get_sp('io.cloudslang.qualys.base_url')}"
     - qualys_username: "${get_sp('io.cloudslang.qualys.username')}"
@@ -30,21 +30,6 @@ flow:
         default: '0'
         required: false
   workflow:
-    - qualys_host_detection_query_params:
-        do:
-          io.cloudslang.qualys.utils.qualys_host_detection_query_params:
-            - detection_updated_since: '${detection_updated_since}'
-            - status: '${status}'
-            - truncation_limit: '${truncation_limit}'
-            - show_results: '${show_results}'
-            - show_qds: '${show_qds}'
-            - show_qds_factors: '${show_qds_factors}'
-            - ids: '${ids}'
-            - id_min: '${id_min}'
-        publish:
-          - query_params
-        navigate:
-          - SUCCESS: http_client_post
     - http_client_post:
         do:
           io.cloudslang.base.http.http_client_post:
@@ -71,9 +56,6 @@ flow:
 extensions:
   graph:
     steps:
-      qualys_host_detection_query_params:
-        x: 40
-        'y': 120
       http_client_post:
         x: 280
         'y': 120
