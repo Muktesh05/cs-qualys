@@ -6,6 +6,12 @@ flow:
         do:
           io.cloudslang.qualys.utils.host_list_inputs_to_json: []
         navigate:
+          - SUCCESS: qualys_host_detection_query_params
+    - qualys_host_detection_query_params:
+        do:
+          io.cloudslang.qualys.utils.qualys_host_detection_query_params:
+            - action: list
+        navigate:
           - SUCCESS: SUCCESS
   results:
     - SUCCESS
@@ -13,10 +19,13 @@ extensions:
   graph:
     steps:
       host_list_inputs_to_json:
-        x: 200
-        'y': 200
+        x: 40
+        'y': 240
+      qualys_host_detection_query_params:
+        x: 160
+        'y': 80
         navigate:
-          010aec0b-86c6-b2b3-fb33-3a23368e0da9:
+          c3f07393-bbcf-1c75-d001-0ef31ce2dffe:
             targetId: a121157d-0c11-b33a-6fa7-9cb57d0ef63e
             port: SUCCESS
     results:
