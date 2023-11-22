@@ -3,6 +3,9 @@
 #!!
 #! @input action: (Required) The action to perform, typically 'list'.
 #! @input echo_request: (Optional) Specify 1 to view input parameters in the XML output.
+#! @input ids: (Optional) Show only certain host IDs/ranges.
+#! @input truncation_limit: (Optional) Maximum number of host records processed per request.
+#! @input id_min: (Optional) Show only hosts with a minimum host ID value.
 #! @input show_asset_id: (Optional) Shows the asset ID of the scanned hosts in the output.
 #! @input include_vuln_type: (Optional) Download vulnerability information based on their type.
 #! @input show_results: (Optional) Controls the inclusion of results in the output.
@@ -11,9 +14,6 @@
 #! @input arf_service_filter: (Optional) Identify vulnerabilities on ports/services.
 #! @input arf_config_filter: (Optional) Identify vulnerabilities based on host configuration.
 #! @input output_format: (Optional) Specifies the format of the output.
-#! @input truncation_limit: (Optional) Maximum number of host records processed per request.
-#! @input ids: (Optional) Show only certain host IDs/ranges.
-#! @input id_min: (Optional) Show only hosts with a minimum host ID value.
 #! @input ips: (Optional) Show only certain IP addresses/ranges.
 #! @input ag_ids: (Optional) Show only hosts belonging to specified asset groups.
 #! @input network_ids: (Optional) Restrict request to certain custom network IDs.
@@ -43,8 +43,18 @@ namespace: io.cloudslang.qualys.utils
 operation:
   name: qualys_host_detection_query_params
   inputs:
-    - action
+    - action: list
     - echo_request:
+        required: false
+    - ids:
+        required: false
+    - detection_updated_since:
+        required: false
+    - status:
+        required: false
+    - truncation_limit:
+        required: false
+    - id_min:
         required: false
     - show_asset_id:
         required: false
@@ -61,12 +71,6 @@ operation:
     - arf_config_filter:
         required: false
     - output_format:
-        required: false
-    - truncation_limit:
-        required: false
-    - ids:
-        required: false
-    - id_min:
         required: false
     - ips:
         required: false
@@ -115,7 +119,7 @@ operation:
   python_action:
     use_jython: false
     script: |-
-      def execute(action, echo_request, show_asset_id, include_vuln_type, show_results, show_reopened_info, arf_kernel_filter, arf_service_filter, arf_config_filter, output_format, truncation_limit, ids, id_min, ips, ag_ids, network_ids, vm_scan_since, no_vm_scan_since, vm_scan, before, compliance_enabled, os_pattern, qids, severities, show_igs, titles, filter_superseded_qids, use_tags, tag_set_by, tag_include_selector, tag_exclude_selector, tag_set_include, tag_set_exclude, show_tags, show_qds):
+      def execute(action, status, detection_updated_since, echo_request, show_asset_id, include_vuln_type, show_results, show_reopened_info, arf_kernel_filter, arf_service_filter, arf_config_filter, output_format, truncation_limit, ids, id_min, ips, ag_ids, network_ids, vm_scan_since, no_vm_scan_since, vm_scan, before, compliance_enabled, os_pattern, qids, severities, show_igs, titles, filter_superseded_qids, use_tags, tag_set_by, tag_include_selector, tag_exclude_selector, tag_set_include, tag_set_exclude, show_tags, show_qds):
           params = {key: value for key, value in locals().items() if value}
           query_string = '&'.join(f"{key}={value}" for key, value in params.items())
           return {"query_params": query_string}
