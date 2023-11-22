@@ -1,8 +1,6 @@
 
 ########################################################################################################################
-# Qualys Host Detection API CloudSlang Operation
-# This operation constructs a query for the Qualys Host Detection API based on provided input parameters.
-#
+#!!
 #! @input action: (Required) The action to perform, typically 'list'.
 #! @input echo_request: (Optional) Specify 1 to view input parameters in the XML output.
 #! @input show_asset_id: (Optional) Shows the asset ID of the scanned hosts in the output.
@@ -38,6 +36,7 @@
 #! @input tag_set_exclude: (Optional) Specify a tag set to exclude hosts.
 #! @input show_tags: (Optional) Display asset tags associated with each host.
 #! @input show_qds: (Optional) Show the QDS value for each detection record.
+#!!#
 ########################################################################################################################
 
 namespace: io.cloudslang.qualys.utils
@@ -153,9 +152,10 @@ operation:
           if tag_set_exclude: parameters.append("tag_set_exclude=" + str(tag_set_exclude))
           if show_tags: parameters.append("show_tags=" + str(show_tags))
           if show_qds: parameters.append("show_qds=" + str(show_qds))
-          print query_string
-          query_string = '&'.join(parameters)
-          return {"query_params": query_string}
+          
+          parameter_string = '&'.join(parameters)
+
+          return {"query_params": parameter_string}
   outputs:
     - query_params
   results:
