@@ -116,10 +116,9 @@ operation:
     use_jython: false
     script: |-
       def execute(action, echo_request, show_asset_id, include_vuln_type, show_results, show_reopened_info, arf_kernel_filter, arf_service_filter, arf_config_filter, output_format, truncation_limit, ids, id_min, ips, ag_ids, network_ids, vm_scan_since, no_vm_scan_since, vm_scan, before, compliance_enabled, os_pattern, qids, severities, show_igs, titles, filter_superseded_qids, use_tags, tag_set_by, tag_include_selector, tag_exclude_selector, tag_set_include, tag_set_exclude, show_tags, show_qds):
-          params = {key: value for key, value in locals().items() if value is not None}
+          params = {key: value for key, value in locals().items() if value}
           query_string = '&'.join(f"{key}={value}" for key, value in params.items())
           return {"query_params": query_string}
-
   outputs:
     - query_params
   results:
