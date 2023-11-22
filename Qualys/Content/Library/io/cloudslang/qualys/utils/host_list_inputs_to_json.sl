@@ -148,8 +148,64 @@ operation:
     use_jython: false
     script: |-
       # do not remove the execute function
-      def execute():
-          # code goes here
+      def execute(action, echo_request, show_asset_id, details, os_pattern, truncation_limit, ips, ipv6, ag_ids, ag_titles, ids, id_min, id_max, network_ids, compliance_enabled, no_vm_scan_since, no_compliance_scan_since, vm_scan_since, compliance_scan_since, vm_processed_before, vm_processed_after, vm_scan_date_before, vm_scan_date_after, vm_auth_scan_date_before, vm_auth_scan_date_after, scap_scan_since, no_scap_scan_since, use_tags, tag_set_by, tag_include_selector, tag_exclude_selector, tag_set_include, tag_set_exclude, show_tags, show_ars, ars_min, ars_max, show_ars_factors, show_trurisk, trurisk_min, trurisk_max, show_trurisk_factors, host_metadata, host_metadata_fields, show_cloud_tags, cloud_tag_fields):
+          import json
+          inputs = {
+              "action": action,
+              "echo_request": echo_request,
+              "show_asset_id": show_asset_id,
+              "details": details,
+              "os_pattern": os_pattern,
+              "truncation_limit": truncation_limit,
+              "ips": ips,
+              "ipv6": ipv6,
+              "ag_ids": ag_ids,
+              "ag_titles": ag_titles,
+              "ids": ids,
+              "id_min": id_min,
+              "id_max": id_max,
+              "network_ids": network_ids,
+              "compliance_enabled": compliance_enabled,
+              "no_vm_scan_since": no_vm_scan_since,
+              "no_compliance_scan_since": no_compliance_scan_since,
+              "vm_scan_since": vm_scan_since,
+              "compliance_scan_since": compliance_scan_since,
+              "vm_processed_before": vm_processed_before,
+              "vm_processed_after": vm_processed_after,
+              "vm_scan_date_before": vm_scan_date_before,
+              "vm_scan_date_after": vm_scan_date_after,
+              "vm_auth_scan_date_before": vm_auth_scan_date_before,
+              "vm_auth_scan_date_after": vm_auth_scan_date_after,
+              "scap_scan_since": scap_scan_since,
+              "no_scap_scan_since": no_scap_scan_since,
+              "use_tags": use_tags,
+              "tag_set_by": tag_set_by,
+              "tag_include_selector": tag_include_selector,
+              "tag_exclude_selector": tag_exclude_selector,
+              "tag_set_include": tag_set_include,
+              "tag_set_exclude": tag_set_exclude,
+              "show_tags": show_tags,
+              "show_ars": show_ars,
+              "ars_min": ars_min,
+              "ars_max": ars_max,
+              "show_ars_factors": show_ars_factors,
+              "show_trurisk": show_trurisk,
+              "trurisk_min": trurisk_min,
+              "trurisk_max": trurisk_max,
+              "show_trurisk_factors": show_trurisk_factors,
+              "host_metadata": host_metadata,
+              "host_metadata_fields": host_metadata_fields,
+              "show_cloud_tags": show_cloud_tags,
+              "cloud_tag_fields": cloud_tag_fields
+          }
+
+          json_output = json.dumps(inputs)
+
+          # Return the JSON string
+          
+          return {"output": json_output}
+
+
       # you can add additional helper methods below.
   results:
     - SUCCESS
