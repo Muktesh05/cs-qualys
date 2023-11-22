@@ -11,10 +11,10 @@ namespace: io.cloudslang.qualys.vm
 flow:
   name: get_host_list
   inputs:
-    - qualys_base_url: "${get_sp('base_url')}"
-    - qualys_username: "${get_sp('username')}"
+    - qualys_base_url: "${get_sp('io.cloudslang.qualys.base_url')}"
+    - qualys_username: "${get_sp('io.cloudslang.qualys.username')}"
     - qualys_password:
-        default: "${get_sp('password')}"
+        default: "${get_sp('io.cloudslang.qualys.password')}"
         sensitive: true
     - action: list
     - details: Basic
@@ -70,11 +70,11 @@ flow:
 extensions:
   graph:
     steps:
-      http_client_post:
-        x: 320
-        'y': 120
       host_list_inputs_to_json:
         x: 80
+        'y': 120
+      http_client_post:
+        x: 320
         'y': 120
       check_status:
         x: 600

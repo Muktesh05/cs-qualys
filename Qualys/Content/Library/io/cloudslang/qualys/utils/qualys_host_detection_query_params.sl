@@ -7,6 +7,7 @@
 #! @input truncation_limit: (Optional) Maximum number of host records processed per request.
 #! @input id_min: (Optional) Show only hosts with a minimum host ID value.
 #! @input show_asset_id: (Optional) Shows the asset ID of the scanned hosts in the output.
+#! @input show_qds: (Optional) Show the QDS value for each detection record.
 #! @input include_vuln_type: (Optional) Download vulnerability information based on their type.
 #! @input show_results: (Optional) Controls the inclusion of results in the output.
 #! @input show_reopened_info: (Optional) Includes reopened info for reopened vulnerabilities.
@@ -35,7 +36,6 @@
 #! @input tag_set_include: (Optional) Specify a tag set to include hosts.
 #! @input tag_set_exclude: (Optional) Specify a tag set to exclude hosts.
 #! @input show_tags: (Optional) Display asset tags associated with each host.
-#! @input show_qds: (Optional) Show the QDS value for each detection record.
 #!!#
 ########################################################################################################################
 
@@ -57,6 +57,10 @@ operation:
     - id_min:
         required: false
     - show_asset_id:
+        required: false
+    - show_qds:
+        required: false
+    - show_qds_factors:
         required: false
     - include_vuln_type:
         required: false
@@ -114,12 +118,10 @@ operation:
         required: false
     - show_tags:
         required: false
-    - show_qds:
-        required: false
   python_action:
     use_jython: false
     script: |-
-      def execute(action, status, detection_updated_since, echo_request, show_asset_id, include_vuln_type, show_results, show_reopened_info, arf_kernel_filter, arf_service_filter, arf_config_filter, output_format, truncation_limit, ids, id_min, ips, ag_ids, network_ids, vm_scan_since, no_vm_scan_since, vm_scan, before, compliance_enabled, os_pattern, qids, severities, show_igs, titles, filter_superseded_qids, use_tags, tag_set_by, tag_include_selector, tag_exclude_selector, tag_set_include, tag_set_exclude, show_tags, show_qds):
+      def execute(action, status, show_qds_factors, detection_updated_since, echo_request, show_asset_id, include_vuln_type, show_results, show_reopened_info, arf_kernel_filter, arf_service_filter, arf_config_filter, output_format, truncation_limit, ids, id_min, ips, ag_ids, network_ids, vm_scan_since, no_vm_scan_since, vm_scan, before, compliance_enabled, os_pattern, qids, severities, show_igs, titles, filter_superseded_qids, use_tags, tag_set_by, tag_include_selector, tag_exclude_selector, tag_set_include, tag_set_exclude, show_tags, show_qds):
           params = {key: value for key, value in locals().items() if value}
           query_string = '&'.join(f"{key}={value}" for key, value in params.items())
           return {"query_params": query_string}
