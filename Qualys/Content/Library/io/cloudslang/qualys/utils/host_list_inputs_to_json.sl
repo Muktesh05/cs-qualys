@@ -1,13 +1,19 @@
+########################################################################################################################
+#!!
+#! @input action: (Required)
+#! @input echo_request: (Optional) Specify 1 to view input parameters in the XML output. When unspecified, parameters are not included in the XML output.
+#!!#
+########################################################################################################################
 namespace: io.cloudslang.qualys.utils
 operation:
   name: host_list_inputs_to_json
   inputs:
     - action
-    - echo_request:  # Existing input
+    - echo_request:
         required: false
-    - show_asset_id:  # Existing input
+    - show_asset_id:
         required: false
-    - details:  # Existing input
+    - details:
         required: false
     - os_pattern:
         required: false
