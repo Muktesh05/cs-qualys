@@ -1,5 +1,7 @@
 ########################################################################################################################
 #!!
+#! @input action: (Required)
+#! @input echo_request: (Optional) Specify 1 to view input parameters in the XML output. When unspecified, parameters are not included in the XML output.
 #! @input show_asset_id: (Optional) When specified, shows the asset ID of the scanned hosts in the output. 
 #! @input details: (Optional) Show the requested amount of host information for each host. Valid values are Basic, Basic/AGs, All, All/AGs, or None.
 #! @input os_pattern: (Optional) Show only hosts which have an operating system matching a certain regular expression. Must be URL encoded.
