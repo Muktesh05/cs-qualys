@@ -6,6 +6,8 @@ flow:
         do:
           io.cloudslang.qualys.utils.host_list_inputs_to_json:
             - action: list
+            - echo_request: '1'
+            - show_asset_id: '1'
         navigate:
           - SUCCESS: SUCCESS
   results:
