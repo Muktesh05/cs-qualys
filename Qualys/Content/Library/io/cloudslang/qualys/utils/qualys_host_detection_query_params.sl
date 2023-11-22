@@ -115,15 +115,47 @@ operation:
         required: false
   python_action:
     script: |-
+      # do not remove the execute function
       def execute(action, echo_request, show_asset_id, include_vuln_type, show_results, show_reopened_info, arf_kernel_filter, arf_service_filter, arf_config_filter, output_format, truncation_limit, ids, id_min, ips, ag_ids, network_ids, vm_scan_since, no_vm_scan_since, vm_scan, before, compliance_enabled, os_pattern, qids, severities, show_igs, titles, filter_superseded_qids, use_tags, tag_set_by, tag_include_selector, tag_exclude_selector, tag_set_include, tag_set_exclude, show_tags, show_qds):
-          parameters = locals()
-          query_components = []
-          for name, value in parameters.items():
-              if value is not None and value != '':
-                  query_components.append(f"{name}={value}")
-          query_string = '&'.join(query_components)
+          parameters = []
+          if action: parameters.append("action=" + str(action))
+          if echo_request: parameters.append("echo_request=" + str(echo_request))
+          if show_asset_id: parameters.append("show_asset_id=" + str(show_asset_id))
+          if include_vuln_type: parameters.append("include_vuln_type=" + str(include_vuln_type))
+          if show_results: parameters.append("show_results=" + str(show_results))
+          if show_reopened_info: parameters.append("show_reopened_info=" + str(show_reopened_info))
+          if arf_kernel_filter: parameters.append("arf_kernel_filter=" + str(arf_kernel_filter))
+          if arf_service_filter: parameters.append("arf_service_filter=" + str(arf_service_filter))
+          if arf_config_filter: parameters.append("arf_config_filter=" + str(arf_config_filter))
+          if output_format: parameters.append("output_format=" + str(output_format))
+          if truncation_limit: parameters.append("truncation_limit=" + str(truncation_limit))
+          if ids: parameters.append("ids=" + str(ids))
+          if id_min: parameters.append("id_min=" + str(id_min))
+          if ips: parameters.append("ips=" + str(ips))
+          if ag_ids: parameters.append("ag_ids=" + str(ag_ids))
+          if network_ids: parameters.append("network_ids=" + str(network_ids))
+          if vm_scan_since: parameters.append("vm_scan_since=" + str(vm_scan_since))
+          if no_vm_scan_since: parameters.append("no_vm_scan_since=" + str(no_vm_scan_since))
+          if vm_scan: parameters.append("vm_scan=" + str(vm_scan))
+          if before: parameters.append("before=" + str(before))
+          if compliance_enabled: parameters.append("compliance_enabled=" + str(compliance_enabled))
+          if os_pattern: parameters.append("os_pattern=" + str(os_pattern))
+          if qids: parameters.append("qids=" + str(qids))
+          if severities: parameters.append("severities=" + str(severities))
+          if show_igs: parameters.append("show_igs=" + str(show_igs))
+          if titles: parameters.append("titles=" + str(titles))
+          if filter_superseded_qids: parameters.append("filter_superseded_qids=" + str(filter_superseded_qids))
+          if use_tags: parameters.append("use_tags=" + str(use_tags))
+          if tag_set_by: parameters.append("tag_set_by=" + str(tag_set_by))
+          if tag_include_selector: parameters.append("tag_include_selector=" + str(tag_include_selector))
+          if tag_exclude_selector: parameters.append("tag_exclude_selector=" + str(tag_exclude_selector))
+          if tag_set_include: parameters.append("tag_set_include=" + str(tag_set_include))
+          if tag_set_exclude: parameters.append("tag_set_exclude=" + str(tag_set_exclude))
+          if show_tags: parameters.append("show_tags=" + str(show_tags))
+          if show_qds: parameters.append("show_qds=" + str(show_qds))
+          print query_string
+          query_string = '&'.join(parameters)
           return {"query_params": query_string}
-
   outputs:
     - query_params
   results:
