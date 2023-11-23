@@ -1,23 +1,27 @@
 ########################################################################################################################
 #!!
 #! @input ids: (Optional) Show only certain host IDs/ranges.
+#! @input output_file: Path to the file to save the response.
 #! @input id_min: (Optional) Show only hosts with a minimum host ID value.
 #!!#
 ########################################################################################################################
 namespace: io.cloudslang.qualys.vm
 flow:
-  name: get_knowledge_base
+  name: download_vulnerabilities
   inputs:
-    - qualys_base_url: "${get_sp('io.cloudslang.qualys.base_url')}"
-    - qualys_username: "${get_sp('io.cloudslang.qualys.username')}"
-    - qualys_password:
+    - base_url: "${get_sp('io.cloudslang.qualys.base_url')}"
+    - username:
+        default: "${get_sp('io.cloudslang.qualys.username')}"
+        required: true
+    - password:
         default: "${get_sp('io.cloudslang.qualys.password')}"
         sensitive: true
     - ids:
         required: false
-    - id_min:
-        required: false
     - details:
+        required: false
+    - output_file
+    - id_min:
         required: false
     - id_max:
         required: false
@@ -26,33 +30,27 @@ flow:
         do:
           io.cloudslang.qualys.utils.qualys_knowledge_base_query_params:
             - details: '${details}'
-            - ids: '${ids}'
+            - ids: '${ids.strip()}'
             - id_min: '${id_min}'
             - id_max: '${id_max}'
         publish:
           - query_params
         navigate:
-          - SUCCESS: http_client_post
-    - http_client_post:
+          - SUCCESS: download_vulnerabilities_stream
+    - download_vulnerabilities_stream:
         do:
-          io.cloudslang.base.http.http_client_post:
-            - url: "${'https://' + qualys_base_url + '/api/2.0/fo/knowledge_base/vuln/'}"
-            - auth_type: Basic
-            - username: '${qualys_username}'
-            - password:
-                value: '${qualys_password}'
-                sensitive: true
-            - headers: 'X-Requested-With: ACE'
+          io.cloudslang.qualys.vm.download_host_detection_stream:
+            - url: "${'https://' + base_url + '/api/2.0/fo/knowledge_base/vuln/'}"
             - query_params: '${query_params}'
-        publish:
-          - return_result
-          - status_code
-          - error_message
+            - headers: 'X-Requested-With: ACE'
+            - username: '${username}'
+            - password:
+                value: '${password}'
+                sensitive: true
+            - output_file: '${output_file.replace(" ","")}'
         navigate:
           - SUCCESS: SUCCESS
           - FAILURE: on_failure
-  outputs:
-    - return_result: '${return_result}'
   results:
     - FAILURE
     - SUCCESS
@@ -60,17 +58,17 @@ extensions:
   graph:
     steps:
       qualys_knowledge_base_query_params:
-        x: 40
-        'y': 80
-      http_client_post:
-        x: 280
-        'y': 80
+        x: 80
+        'y': 160
+      download_vulnerabilities_stream:
+        x: 360
+        'y': 160
         navigate:
-          be9d1d5b-6a65-8c5b-0012-71b34e947739:
-            targetId: e475f956-01e7-ac78-dbcc-b915390e6467
+          210a2031-499a-aac0-a05d-8f1d3f4ed1cf:
+            targetId: 8c146a1b-afad-54c2-aeed-e4728d9e81ac
             port: SUCCESS
     results:
       SUCCESS:
-        e475f956-01e7-ac78-dbcc-b915390e6467:
-          x: 520
-          'y': 80
+        8c146a1b-afad-54c2-aeed-e4728d9e81ac:
+          x: 640
+          'y': 160

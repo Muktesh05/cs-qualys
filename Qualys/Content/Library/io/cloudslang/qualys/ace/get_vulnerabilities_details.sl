@@ -1,55 +1,61 @@
 ########################################################################################################################
 #!!
+#! @input ids: (Optional) Show only certain host IDs/ranges.
 #! @input id_min: (Optional) Show only hosts with a minimum host ID value.
 #!!#
 ########################################################################################################################
 namespace: io.cloudslang.qualys.ace
 flow:
-  name: get_vulnerability_status
+  name: get_vulnerabilities_details
   inputs:
+    - ids:
+        default: 256117-374891
+        required: false
     - id_min:
-        default: '${id_min}'
+        required: false
+    - id_max:
         required: false
   workflow:
-    - get_host_detection_list:
+    - get_knowledge_base:
         do:
-          io.cloudslang.qualys.vm.get_host_detection_list:
+          io.cloudslang.qualys.vm.get_knowledge_base:
+            - ids: '${ids}'
             - id_min: '${id_min}'
-            - truncation_limit: '15'
+            - details: Basic
+            - id_max: '${id_max}'
         publish:
           - return_result
         navigate:
           - FAILURE: on_failure
-          - SUCCESS: qualys_vuln_status_xml_to_ace_json
-    - qualys_vuln_status_xml_to_ace_json:
+          - SUCCESS: qualys_vuln_xml_to_ace_json
+    - qualys_vuln_xml_to_ace_json:
         do:
-          io.cloudslang.qualys.utils.qualys_vuln_status_xml_to_ace_json:
+          io.cloudslang.qualys.utils.qualys_vuln_xml_to_ace_json:
             - xml_input: '${return_result}'
-            - unique_qids: "${get('unique_qid_list', '')}"
         publish:
-          - unique_qid_list
-          - id_min
+          - vulnerabilities
         navigate:
-          - HAS_MORE: get_host_detection_list
           - SUCCESS: SUCCESS
+  outputs:
+    - vulnerabilities: '${vulnerabilities}'
   results:
     - FAILURE
     - SUCCESS
 extensions:
   graph:
     steps:
-      get_host_detection_list:
+      get_knowledge_base:
         x: 40
         'y': 80
-      qualys_vuln_status_xml_to_ace_json:
+      qualys_vuln_xml_to_ace_json:
         x: 360
         'y': 80
         navigate:
-          936c8f48-e551-9596-88e8-1bf15f7cc2ca:
-            targetId: 6a80c06f-726d-bc97-3dce-9c1bbfba1ef8
+          c8a9f511-963a-6fe6-87a8-4bc79fa4b485:
+            targetId: 91b938f9-6074-0c2e-5498-e06ec49208ec
             port: SUCCESS
     results:
       SUCCESS:
-        6a80c06f-726d-bc97-3dce-9c1bbfba1ef8:
-          x: 760
+        91b938f9-6074-0c2e-5498-e06ec49208ec:
+          x: 680
           'y': 80

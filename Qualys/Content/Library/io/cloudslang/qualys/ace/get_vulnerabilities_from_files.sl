@@ -5,34 +5,34 @@
 ########################################################################################################################
 namespace: io.cloudslang.qualys.ace
 flow:
-  name: get_vulnerabilities
+  name: get_vulnerabilities_from_files
   inputs:
     - elements:
-        default: '100'
+        default: '500'
         required: false
     - truncation_limit:
         default: '40'
         required: false
     - parallel_throttle:
-        default: '7'
+        default: '2'
         required: false
   workflow:
-    - get_host_detection_list:
+    - download_host_detection:
         do:
-          io.cloudslang.qualys.vm.get_host_detection_list:
-            - id_min: '${id_min}'
+          io.cloudslang.qualys.vm.download_host_detection:
             - truncation_limit: '${truncation_limit}'
-        publish:
-          - return_result
+            - id_min: '${id_min}'
+            - output_file: "C:\\host_detection.xml"
         navigate:
           - FAILURE: on_failure
           - SUCCESS: qualys_vuln_status_xml_to_ace_json
     - qualys_vuln_status_xml_to_ace_json:
         do:
           io.cloudslang.qualys.utils.qualys_vuln_status_xml_to_ace_json:
-            - xml_input: '${return_result}'
+            - xml_input: "C:\\host_detection.xml"
+            - unique_qids: "${get('unique_qid_list', \"\")}"
         publish:
-          - vulnerabilities
+          - hosts
           - id_min
           - unique_qid_list
         navigate:
@@ -46,17 +46,7 @@ flow:
         publish:
           - range_list
         navigate:
-          - SUCCESS: get_knowledge_base
-    - get_knowledge_base:
-        parallel_loop:
-          for: id_range in range_list
-          max_throttle: '${parallel_throttle}'
-          do:
-            io.cloudslang.qualys.vm.get_knowledge_base:
-              - ids: '${id_range}'
-        navigate:
-          - FAILURE: on_failure
-          - SUCCESS: SUCCESS
+          - SUCCESS: get_vulnerabilities_details_from_file_1
     - get_ranges_1:
         do:
           io.cloudslang.qualys.utils.get_ranges:
@@ -65,24 +55,36 @@ flow:
         publish:
           - range_list
         navigate:
-          - SUCCESS: get_knowledge_base_1
-    - get_knowledge_base_1:
+          - SUCCESS: get_vulnerabilities_details_from_file
+    - get_vulnerabilities_details_from_file:
         parallel_loop:
-          for: id_range in range_list
-          max_throttle: '${parallel_throttle}'
+          for: range in range_list
+          max_throttle: '1'
           do:
-            io.cloudslang.qualys.vm.get_knowledge_base:
-              - ids: '${id_range}'
+            io.cloudslang.qualys.ace.get_vulnerabilities_details_from_file:
+              - ids: '${range}'
+              - output_file: "${'C:\\\\vulnerabilities' + range + '.xml'}"
         navigate:
+          - SUCCESS: download_host_detection
           - FAILURE: on_failure
-          - SUCCESS: get_host_detection_list
+    - get_vulnerabilities_details_from_file_1:
+        parallel_loop:
+          for: range in range_list
+          max_throttle: '1'
+          do:
+            io.cloudslang.qualys.ace.get_vulnerabilities_details_from_file:
+              - ids: '${range}'
+              - output_file: "${'C:\\\\vulnerabilities' + range + '.xml'}"
+        navigate:
+          - SUCCESS: SUCCESS
+          - FAILURE: on_failure
   results:
     - FAILURE
     - SUCCESS
 extensions:
   graph:
     steps:
-      get_host_detection_list:
+      download_host_detection:
         x: 40
         'y': 80
       qualys_vuln_status_xml_to_ace_json:
@@ -91,19 +93,19 @@ extensions:
       get_ranges:
         x: 440
         'y': 80
-      get_knowledge_base:
-        x: 640
-        'y': 80
-        navigate:
-          6a907616-4ce1-0f1c-c027-8af61938e844:
-            targetId: 033890f0-e671-2c61-71b2-fdd806805c97
-            port: SUCCESS
       get_ranges_1:
         x: 240
         'y': 320
-      get_knowledge_base_1:
+      get_vulnerabilities_details_from_file:
         x: 40
         'y': 320
+      get_vulnerabilities_details_from_file_1:
+        x: 680
+        'y': 80
+        navigate:
+          82520e2a-9411-2508-6369-877934d969ed:
+            targetId: 033890f0-e671-2c61-71b2-fdd806805c97
+            port: SUCCESS
     results:
       SUCCESS:
         033890f0-e671-2c61-71b2-fdd806805c97:
