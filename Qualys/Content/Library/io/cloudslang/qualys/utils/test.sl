@@ -2,11 +2,6 @@ namespace: io.cloudslang.qualys.utils
 flow:
   name: test
   workflow:
-    - host_list_inputs_to_json:
-        do:
-          io.cloudslang.qualys.utils.host_list_inputs_to_json: []
-        navigate:
-          - SUCCESS: qualys_host_detection_query_params
     - qualys_host_detection_query_params:
         do:
           io.cloudslang.qualys.utils.qualys_host_detection_query_params:
@@ -18,9 +13,6 @@ flow:
 extensions:
   graph:
     steps:
-      host_list_inputs_to_json:
-        x: 40
-        'y': 240
       qualys_host_detection_query_params:
         x: 160
         'y': 80
