@@ -102,8 +102,8 @@ extensions:
         x: 440
         'y': 240
       get_knowledge_base_1:
-        x: 240
-        'y': 400
+        x: 120
+        'y': 360
     results:
       SUCCESS:
         033890f0-e671-2c61-71b2-fdd806805c97:
