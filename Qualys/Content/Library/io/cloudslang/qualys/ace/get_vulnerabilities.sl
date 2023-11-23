@@ -26,10 +26,10 @@ flow:
           - return_result
         navigate:
           - FAILURE: on_failure
-          - SUCCESS: qualys_vuln_xml_to_ace_json
-    - qualys_vuln_xml_to_ace_json:
+          - SUCCESS: qualys_vuln_status_xml_to_ace_json
+    - qualys_vuln_status_xml_to_ace_json:
         do:
-          io.cloudslang.qualys.utils.qualys_vuln_xml_to_ace_json:
+          io.cloudslang.qualys.utils.qualys_vuln_status_xml_to_ace_json:
             - xml_input: '${return_result}'
         publish:
           - vulnerabilities
@@ -85,7 +85,7 @@ extensions:
       get_host_detection_list:
         x: 40
         'y': 80
-      qualys_vuln_xml_to_ace_json:
+      qualys_vuln_status_xml_to_ace_json:
         x: 240
         'y': 160
       get_ranges:

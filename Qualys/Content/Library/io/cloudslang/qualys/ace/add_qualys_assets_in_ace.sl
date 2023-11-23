@@ -19,11 +19,11 @@ flow:
             - first_string: '${status_code}'
             - second_string: '200'
         navigate:
-          - SUCCESS: qualys_xml_to_ace_json
+          - SUCCESS: qualys_hosts_xml_to_ace_json
           - FAILURE: on_failure
-    - qualys_xml_to_ace_json:
+    - qualys_hosts_xml_to_ace_json:
         do:
-          io.cloudslang.qualys.utils.qualys_xml_to_ace_json:
+          io.cloudslang.qualys.utils.qualys_hosts_xml_to_ace_json:
             - xml_input: '${return_result}'
             - base_url: "${get_sp('io.cloudslang.qualys.base_url')}"
         publish:
@@ -63,7 +63,7 @@ extensions:
       check_status:
         x: 280
         'y': 120
-      qualys_xml_to_ace_json:
+      qualys_hosts_xml_to_ace_json:
         x: 480
         'y': 280
       dummy_call_to_ace:

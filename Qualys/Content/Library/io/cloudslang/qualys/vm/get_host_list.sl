@@ -25,9 +25,9 @@ flow:
     - id_min:
         required: false
   workflow:
-    - host_list_inputs_to_json:
+    - qualys_host_query_params:
         do:
-          io.cloudslang.qualys.utils.host_list_inputs_to_json:
+          io.cloudslang.qualys.utils.qualys_host_query_params:
             - action: '${action}'
             - details: '${details}'
             - truncation_limit: '${truncation_limit}'
