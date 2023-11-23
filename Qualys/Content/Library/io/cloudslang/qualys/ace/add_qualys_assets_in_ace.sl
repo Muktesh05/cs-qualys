@@ -5,7 +5,8 @@ flow:
     - get_host_list:
         do:
           io.cloudslang.qualys.vm.get_host_list:
-            - truncation_limit: '30'
+            - truncation_limit: '10'
+            - id_min: '${id_min}'
         publish:
           - return_result
           - status_code
@@ -29,7 +30,9 @@ flow:
           - ace_json
           - warning_code
           - warning_url
+          - id_min
         navigate:
+          - HAS_MORE: dummy_call_to_ace_1
           - SUCCESS: dummy_call_to_ace
     - dummy_call_to_ace:
         do:
@@ -37,30 +40,14 @@ flow:
             - origin_string: ''
             - text: "${'{ \"assets\":' + ace_json  +  '}'}"
         navigate:
-          - SUCCESS: is_warning_1980
-    - is_warning_1980:
+          - SUCCESS: SUCCESS
+    - dummy_call_to_ace_1:
         do:
-          io.cloudslang.base.strings.string_equals:
-            - first_string: '${warning_code}'
-            - second_string: '1980'
+          io.cloudslang.base.strings.append:
+            - origin_string: ''
+            - text: "${'{ \"assets\":' + ace_json  +  '}'}"
         navigate:
-          - SUCCESS: http_client_post
-          - FAILURE: SUCCESS
-    - http_client_post:
-        do:
-          io.cloudslang.base.http.http_client_post:
-            - url: '${warning_url}'
-            - auth_type: Basic
-            - username: "${get_sp('io.cloudslang.qualys.username')}"
-            - password:
-                value: "${get_sp('io.cloudslang.qualys.password')}"
-                sensitive: true
-            - headers: 'X-Requested-With: ACE'
-        publish:
-          - return_result
-        navigate:
-          - SUCCESS: qualys_xml_to_ace_json
-          - FAILURE: on_failure
+          - SUCCESS: get_host_list
   outputs:
     - warning: '${warning}'
     - warning_code: '${warning_code}'
@@ -78,22 +65,19 @@ extensions:
         'y': 120
       qualys_xml_to_ace_json:
         x: 480
-        'y': 120
+        'y': 280
       dummy_call_to_ace:
-        x: 640
-        'y': 120
-      is_warning_1980:
-        x: 800
-        'y': 240
+        x: 680
+        'y': 400
         navigate:
-          08d6a575-b6f0-a633-b6e0-0b11e641df53:
+          830ecaa1-0c2a-c843-e437-35777251cb42:
             targetId: c0d334bf-247a-2a4e-2a36-7a3b8903b49f
-            port: FAILURE
-      http_client_post:
-        x: 800
-        'y': 480
+            port: SUCCESS
+      dummy_call_to_ace_1:
+        x: 240
+        'y': 400
     results:
       SUCCESS:
         c0d334bf-247a-2a4e-2a36-7a3b8903b49f:
-          x: 960
-          'y': 120
+          x: 920
+          'y': 400

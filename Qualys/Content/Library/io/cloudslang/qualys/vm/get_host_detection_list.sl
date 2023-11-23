@@ -1,5 +1,8 @@
 ########################################################################################################################
 #!!
+#! @description: This flow makes a POST call to Qualys API: /api/2.0/fo/asset/host/vm/detection/?action=list
+#!               Returns an XML output
+#!
 #! @input ids: (Optional) Show only certain host IDs/ranges.
 #! @input id_min: (Optional) Show only hosts with a minimum host ID value.
 #! @input truncation_limit: (Optional) Maximum number of host records processed per request.
@@ -24,8 +27,12 @@ flow:
         required: false
     - truncation_limit:
         required: false
-    - show_qds: '1'
-    - show_qds_factors: '1'
+    - show_qds:
+        default: '1'
+        required: false
+    - show_qds_factors:
+        default: '1'
+        required: false
     - show_results:
         default: '0'
         required: false

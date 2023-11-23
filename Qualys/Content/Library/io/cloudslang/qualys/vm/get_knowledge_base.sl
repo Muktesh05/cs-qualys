@@ -2,9 +2,6 @@
 #!!
 #! @input ids: (Optional) Show only certain host IDs/ranges.
 #! @input id_min: (Optional) Show only hosts with a minimum host ID value.
-#! @input truncation_limit: (Optional) Maximum number of host records processed per request.
-#! @input show_qds: (Optional) Show the QDS value for each detection record.
-#! @input show_results: (Optional) Controls the inclusion of results in the output.
 #!!#
 ########################################################################################################################
 namespace: io.cloudslang.qualys.vm
@@ -16,24 +13,28 @@ flow:
     - qualys_password: "${get_sp('io.cloudslang.qualys.password')}"
     - ids:
         required: false
-    - status:
-        required: false
     - id_min:
         required: false
-    - detection_updated_since:
+    - details:
         required: false
-    - truncation_limit:
-        required: false
-    - show_qds: '1'
-    - show_qds_factors: '1'
-    - show_results:
-        default: '0'
+    - id_max:
         required: false
   workflow:
+    - qualys_knowledge_base_query_params:
+        do:
+          io.cloudslang.qualys.utils.qualys_knowledge_base_query_params:
+            - details: '${details}'
+            - ids: '${ids}'
+            - id_min: '${id_min}'
+            - id_max: '${id_max}'
+        publish:
+          - query_params
+        navigate:
+          - SUCCESS: http_client_post
     - http_client_post:
         do:
           io.cloudslang.base.http.http_client_post:
-            - url: "${'https://' + qualys_base_url + '/api/2.0/fo/asset/host/vm/detection/'}"
+            - url: "${'https://' + qualys_base_url + '/api/2.0/fo/knowledge_base/vuln/'}"
             - auth_type: Basic
             - username: '${qualys_username}'
             - password:
@@ -56,9 +57,12 @@ flow:
 extensions:
   graph:
     steps:
+      qualys_knowledge_base_query_params:
+        x: 40
+        'y': 80
       http_client_post:
         x: 280
-        'y': 120
+        'y': 80
         navigate:
           be9d1d5b-6a65-8c5b-0012-71b34e947739:
             targetId: e475f956-01e7-ac78-dbcc-b915390e6467
@@ -67,4 +71,4 @@ extensions:
       SUCCESS:
         e475f956-01e7-ac78-dbcc-b915390e6467:
           x: 520
-          'y': 120
+          'y': 80

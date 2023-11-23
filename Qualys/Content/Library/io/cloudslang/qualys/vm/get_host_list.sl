@@ -5,6 +5,7 @@
 #! @input truncation_limit: (Optional) Specify the maximum number of host records processed per request. Default is 1000, can be adjusted to a lower or higher value.
 #! @input vm_scan_date_after: (Optional) Show hosts with a vulnerability scan end date after a specified date (YYYY-MM-DD[THH:MM:SSZ] format).
 #! @input show_tags: (Optional) Specify 1 to display asset tags associated with each host in output.
+#! @input id_min: (Optional) Show only hosts which have a minimum host ID value.
 #!!#
 ########################################################################################################################
 namespace: io.cloudslang.qualys.vm
@@ -21,6 +22,8 @@ flow:
     - truncation_limit: '10'
     - vm_scan_date_after: '2019-08-08'
     - show_tags: '0'
+    - id_min:
+        required: false
   workflow:
     - host_list_inputs_to_json:
         do:
@@ -28,6 +31,7 @@ flow:
             - action: '${action}'
             - details: '${details}'
             - truncation_limit: '${truncation_limit}'
+            - id_min: '${id_min}'
             - vm_scan_date_after: '${vm_scan_date_after}'
             - show_tags: '${show_tags}'
         publish:
