@@ -36,6 +36,7 @@ flow:
           - vulnerabilities
         navigate:
           - SUCCESS: SUCCESS
+          - FAILURE: on_failure
   outputs:
     - vulnerabilities: '${vulnerabilities}'
   results:

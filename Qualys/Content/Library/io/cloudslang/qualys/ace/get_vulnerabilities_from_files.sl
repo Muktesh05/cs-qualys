@@ -38,6 +38,7 @@ flow:
         navigate:
           - HAS_MORE: get_ranges_1
           - SUCCESS: get_ranges
+          - FAILURE: on_failure
     - get_ranges:
         do:
           io.cloudslang.qualys.utils.get_ranges:
