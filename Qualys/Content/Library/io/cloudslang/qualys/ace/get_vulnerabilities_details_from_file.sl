@@ -9,9 +9,8 @@ flow:
   name: get_vulnerabilities_details_from_file
   inputs:
     - ids:
-        default: 256117-374891
         required: false
-    - output_file: "C:\\vulnerabilities.xml"
+    - output_file
   workflow:
     - download_vulnerabilities:
         do:

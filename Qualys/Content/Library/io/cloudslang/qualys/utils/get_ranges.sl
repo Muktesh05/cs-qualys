@@ -26,7 +26,7 @@ operation:
               range_str = f"{numbers[i]}-{numbers[range_end - 1]}"
               range_list.append(range_str)
 
-          return {"range_list":str(range_list)[1:-1].replace("'","")}
+          return {"range_list":str(range_list)[1:-1].replace("'","").strip()}
       # you can add additional helper methods below.
   outputs:
     - range_list

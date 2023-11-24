@@ -8,13 +8,13 @@ flow:
   name: get_vulnerabilities_from_files
   inputs:
     - elements:
-        default: '500'
+        default: '100'
         required: false
     - truncation_limit:
         default: '40'
         required: false
     - parallel_throttle:
-        default: '2'
+        default: '7'
         required: false
   workflow:
     - download_host_detection:
@@ -59,22 +59,22 @@ flow:
     - get_vulnerabilities_details_from_file:
         parallel_loop:
           for: range in range_list
-          max_throttle: '1'
+          max_throttle: '${parallel_throttle}'
           do:
             io.cloudslang.qualys.ace.get_vulnerabilities_details_from_file:
               - ids: '${range}'
-              - output_file: "${'C:\\\\vulnerabilities' + range + '.xml'}"
+              - output_file: "${'C:\\\\vulnerabilities' + range + '_' + run_id +'.xml'}"
         navigate:
           - SUCCESS: download_host_detection
           - FAILURE: on_failure
     - get_vulnerabilities_details_from_file_1:
         parallel_loop:
           for: range in range_list
-          max_throttle: '1'
+          max_throttle: '${parallel_throttle}'
           do:
             io.cloudslang.qualys.ace.get_vulnerabilities_details_from_file:
               - ids: '${range}'
-              - output_file: "${'C:\\\\vulnerabilities' + range + '.xml'}"
+              - output_file: "${'C:\\\\vulnerabilities' + range + '_' + run_id + '.xml'}"
         navigate:
           - SUCCESS: SUCCESS
           - FAILURE: on_failure
