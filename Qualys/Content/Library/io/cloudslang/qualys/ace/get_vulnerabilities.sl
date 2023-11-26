@@ -36,47 +36,47 @@ flow:
           - id_min
           - unique_qid_list
         navigate:
-          - HAS_MORE: get_ranges_1
-          - SUCCESS: get_ranges
+          - HAS_MORE: split_qid_list_1
+          - SUCCESS: split_qid_list
           - FAILURE: on_failure
-    - get_ranges:
-        do:
-          io.cloudslang.qualys.utils.get_ranges:
-            - input_string: '${unique_qid_list}'
-            - elements: '${elements}'
-        publish:
-          - range_list
-        navigate:
-          - SUCCESS: get_knowledge_base
     - get_knowledge_base:
         parallel_loop:
-          for: id_range in range_list
+          for: qids in formatted_list
           max_throttle: '${parallel_throttle}'
           do:
             io.cloudslang.qualys.vm.get_knowledge_base:
-              - ids: '${id_range}'
+              - ids: '${qids.replace(";",",")}'
         navigate:
           - FAILURE: on_failure
           - SUCCESS: SUCCESS
-    - get_ranges_1:
-        do:
-          io.cloudslang.qualys.utils.get_ranges:
-            - input_string: '${unique_qid_list}'
-            - elements: '${elements}'
-        publish:
-          - range_list
-        navigate:
-          - SUCCESS: get_knowledge_base_1
     - get_knowledge_base_1:
         parallel_loop:
-          for: id_range in range_list
+          for: qids in formatted_list
           max_throttle: '${parallel_throttle}'
           do:
             io.cloudslang.qualys.vm.get_knowledge_base:
-              - ids: '${id_range}'
+              - ids: '${qids.replace(";",",")}'
         navigate:
           - FAILURE: on_failure
           - SUCCESS: get_host_detection_list
+    - split_qid_list:
+        do:
+          io.cloudslang.qualys.utils.split_qid_list:
+            - qid_list: '${unique_qid_list}'
+            - elements: '${elements}'
+        publish:
+          - formatted_list
+        navigate:
+          - SUCCESS: get_knowledge_base
+    - split_qid_list_1:
+        do:
+          io.cloudslang.qualys.utils.split_qid_list:
+            - qid_list: '${unique_qid_list}'
+            - elements: '${elements}'
+        publish:
+          - formatted_list
+        navigate:
+          - SUCCESS: get_knowledge_base_1
   results:
     - FAILURE
     - SUCCESS
@@ -89,9 +89,9 @@ extensions:
       qualys_vuln_status_xml_to_ace_json:
         x: 240
         'y': 80
-      get_ranges:
-        x: 440
-        'y': 80
+      get_knowledge_base_1:
+        x: 40
+        'y': 320
       get_knowledge_base:
         x: 640
         'y': 80
@@ -99,11 +99,11 @@ extensions:
           6a907616-4ce1-0f1c-c027-8af61938e844:
             targetId: 033890f0-e671-2c61-71b2-fdd806805c97
             port: SUCCESS
-      get_ranges_1:
+      split_qid_list:
+        x: 440
+        'y': 80
+      split_qid_list_1:
         x: 240
-        'y': 320
-      get_knowledge_base_1:
-        x: 40
         'y': 320
     results:
       SUCCESS:

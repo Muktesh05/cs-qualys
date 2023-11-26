@@ -9,8 +9,9 @@ flow:
   name: get_vulnerabilities_details_from_file
   inputs:
     - ids:
+        default: 11-124535
         required: false
-    - output_file
+    - output_file: "${'C:\\\\vulnerabilities' + run_id + \"_\" + ids +\".xml\"}"
   workflow:
     - download_vulnerabilities:
         do:
