@@ -16,7 +16,6 @@ flow:
     - password:
         default: "${get_sp('io.cloudslang.qualys.password')}"
         sensitive: true
-    - certificate: "${get_sp('io.cloudslang.qualys.TrustedCertificate')}"
     - ids:
         required: false
     - truncation_limit:
@@ -57,7 +56,6 @@ flow:
             - password:
                 value: '${password}'
                 sensitive: true
-            - certificate" '${certificate}'
             - output_file: '${output_file.strip()}'
         publish:
           - response_code

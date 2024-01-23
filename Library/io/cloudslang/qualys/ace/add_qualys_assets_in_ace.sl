@@ -27,33 +27,34 @@ flow:
             - xml_input: '${return_result}'
             - base_url: "${get_sp('io.cloudslang.qualys.base_url')}"
         publish:
-          - ace_json
-          - warning_code
-          - warning_url
-          - id_min
+          - acx_json_chunks
         navigate:
           - HAS_MORE: dummy_call_to_ace_1
-          - SUCCESS: dummy_call_to_ace
-    - dummy_call_to_ace:
+          - SUCCESS: get_post_body
+    - get_post_body:
+        loop:
+          for: json_file in acx_json_chunks
+          do:
+            read_json_file:
+              - json_file
+          publish:
+            - body: file_content
+          navigate:
+            - SUCCESS: post_acx_call
+            - FAILURE: on_failure
+    - post_acx_call:
         do:
-          io.cloudslang.base.strings.append:
-            - origin_string: ''
-            - text: "${'{ \"assets\":' + ace_json  +  '}'}"
+          io.cloudslang.qualys.utils.post_acx_api:
+            - url: http://16.166.49.126:8000/api/2.0/ACX/asset/host
+            - body: '${body}'
+        publish:
+          Response: response_code
         navigate:
-          - SUCCESS: SUCCESS
-    - dummy_call_to_ace_1:
-        do:
-          io.cloudslang.base.strings.append:
-            - origin_string: ''
-            - text: "${'{ \"assets\":' + ace_json  +  '}'}"
-        navigate:
-          - SUCCESS: get_host_list
-  outputs:
-    - warning: '${warning}'
-    - warning_code: '${warning_code}'
+          - SUCCESS: '${Response == "200"}'
   results:
     - FAILURE
     - SUCCESS
+
 extensions:
   graph:
     steps:
@@ -66,14 +67,14 @@ extensions:
       qualys_hosts_xml_to_ace_json:
         x: 480
         'y': 280
-      dummy_call_to_ace:
+      get_post_body:
         x: 680
         'y': 400
         navigate:
           830ecaa1-0c2a-c843-e437-35777251cb42:
             targetId: c0d334bf-247a-2a4e-2a36-7a3b8903b49f
             port: SUCCESS
-      dummy_call_to_ace_1:
+      post_acx_call:
         x: 240
         'y': 400
     results:
